@@ -57,9 +57,21 @@ body {
   background: linear-gradient(135deg, var(--teal), var(--teal-dark));
   padding: 20px 24px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.form-header-left {
+  flex-shrink: 0;
+}
+
+.form-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .form-header-left h1 {
@@ -98,6 +110,27 @@ body {
 .btn-export:active,
 .btn-import:active {
   background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-clear {
+  flex-shrink: 0;
+  padding: 9px 16px;
+  background: rgba(224, 83, 83, 0.16);
+  color: var(--white);
+  border: 1.5px solid rgba(224, 83, 83, 0.45);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.btn-clear:hover {
+  background: rgba(224, 83, 83, 0.32);
+}
+.btn-clear:active {
+  background: rgba(224, 83, 83, 0.14);
 }
 
 /* scrollable body */
@@ -356,10 +389,10 @@ textarea {
 }
 
 #cv-source {
-  /* A touch under the true A4 page height (~1122px as the PDF export
-     library computes it) so a minimal CV never edges a hair over one
-     page and spawns a near-blank second page. */
-  min-height: 1118px;
+  /* A touch under the usable per-page content height (1122px sheet minus
+     the 34px reserved for the footer bar, ~1088px) so a minimal CV never
+     edges a hair over one page and spawns a near-blank second page. */
+  min-height: 1084px;
   display: flex;
   flex-direction: column;
 }
@@ -382,17 +415,36 @@ textarea {
   will-change: transform;
 }
 
-.cv-page-number {
+/* Per-page footer bar — sits outside the windowed/transformed content so
+   it always lands exactly at the bottom of the physical A4 sheet, on
+   every page, instead of wherever the continuous content happens to end. */
+.cv-page-footer {
   position: absolute;
-  right: 14px;
-  bottom: 10px;
-  font-size: 9.5px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 24px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--ink-light);
+  background: var(--cream);
+  border-top: 1px solid var(--cream-mid);
+}
+
+.cv-footer-tagline {
+  flex: 1;
+  text-align: center;
+}
+
+.cv-footer-pageno {
+  flex-shrink: 0;
   font-weight: 600;
   letter-spacing: 0.4px;
-  color: var(--ink-light);
-  background: rgba(255, 255, 255, 0.85);
-  padding: 3px 9px;
-  border-radius: 20px;
 }
 
 /* ── CV Header ───────────────────────────────────────── */
@@ -781,15 +833,129 @@ textarea {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* ── CV Footer ───────────────────────────────────────── */
-.cv-footer {
-  padding: 9px;
-  text-align: center;
-  font-size: 9px;
-  letter-spacing: 1px;
-  color: var(--ink-light);
-  background: var(--cream);
-  border-top: 1px solid var(--cream-mid);
+/* ── Confirm Modal ───────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 43, 53, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal-overlay.is-open {
+  display: flex;
+  animation: modal-overlay-in 1s ease forwards;
+}
+
+.modal-overlay.is-closing {
+  animation: modal-overlay-out 1s ease forwards;
+}
+
+.modal-box {
+  width: 360px;
+  max-width: 100%;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 26px 24px 20px;
+  box-shadow: 0 24px 64px rgba(28, 43, 53, 0.35);
+  transform: scale(0.7);
+  opacity: 0;
+}
+
+.modal-overlay.is-open .modal-box {
+  animation: modal-zoom-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.modal-overlay.is-closing .modal-box {
+  animation: modal-zoom-out 1s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
+
+@keyframes modal-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-zoom-in {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes modal-zoom-out {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+}
+
+.modal-message {
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.65;
+  margin-bottom: 22px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-btn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: background 0.15s;
+}
+
+.modal-btn-cancel {
+  background: var(--teal-xlight);
+  color: var(--ink-mid);
+  border-color: var(--border);
+}
+.modal-btn-cancel:hover {
+  background: var(--border);
+}
+
+.modal-btn-ok {
+  background: #e05353;
+  color: var(--white);
+}
+.modal-btn-ok:hover {
+  background: #c23f3f;
 }
 
 /* ── Scrollbars ──────────────────────────────────────── */

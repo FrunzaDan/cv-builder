@@ -16,6 +16,8 @@
   const uid = () => ++nextId;
   let photoData = null;
 
+  const STORAGE_KEY = "cv-builder-data";
+
   const PERSONAL_FIELD_IDS = {
     name: "f-name",
     role: "f-role",
@@ -118,6 +120,131 @@
     reader.readAsText(file);
   }
 
+  function collectFormData() {
+    const data = {};
+    Object.entries(PERSONAL_FIELD_IDS).forEach(([key, id]) => {
+      data[key] = val(id);
+    });
+    data.photo = photoData;
+    data.experience = state.exp.map(({ title, sub, period, desc }) => ({ title, sub, period, desc }));
+    data.education = state.edu.map(({ title, sub, period, desc }) => ({ title, sub, period, desc }));
+    data.skills = [...state.skills];
+    data.languages = state.langs.map(({ name, level }) => ({ name, level }));
+    return data;
+  }
+
+  function handleJSONExport() {
+    const blob = new Blob([JSON.stringify(collectFormData(), null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${val("f-name").replace(/\s+/g, "_") || "CV"}_data.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ── Local Storage persistence ────────────────────────────
+     Every render() call (i.e. every meaningful change) snapshots the
+     current form into localStorage, so a page reload picks up right
+     where the user left off. */
+  function persist() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(collectFormData()));
+    } catch (err) {
+      console.warn("Could not save CV data to local storage:", err);
+    }
+  }
+
+  function loadPersisted() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      loadDataFromJSON(JSON.parse(raw));
+      return true;
+    } catch (err) {
+      console.warn("Could not load saved CV data from local storage:", err);
+      return false;
+    }
+  }
+
+  function resetForm() {
+    Object.values(PERSONAL_FIELD_IDS).forEach((id) => {
+      el(id).value = "";
+    });
+    setPhoto(null);
+    nextId = 0;
+    state.exp = [];
+    state.edu = [];
+    state.skills = [];
+    state.langs = [];
+    renderEntryList("exp");
+    renderEntryList("edu");
+    renderLangList();
+    renderTags();
+    render();
+  }
+
+  /* ── Confirm Modal ─────────────────────────────────────── */
+  // Custom OK/Cancel modal (zoom in/out over 1s) used in place of the
+  // browser's native confirm() for destructive actions.
+  const MODAL_ANIM_MS = 1000;
+
+  function showConfirmModal(message) {
+    return new Promise((resolve) => {
+      const overlay = el("modal-overlay");
+      el("modal-message").textContent = message;
+
+      overlay.classList.remove("is-closing");
+      overlay.classList.add("is-open");
+
+      const okBtn = el("modal-ok");
+      const cancelBtn = el("modal-cancel");
+
+      const close = (result) => {
+        okBtn.removeEventListener("click", onOk);
+        cancelBtn.removeEventListener("click", onCancel);
+        overlay.removeEventListener("click", onOverlayClick);
+        document.removeEventListener("keydown", onKeydown);
+
+        overlay.classList.add("is-closing");
+        setTimeout(() => {
+          overlay.classList.remove("is-open", "is-closing");
+        }, MODAL_ANIM_MS);
+
+        resolve(result);
+      };
+
+      const onOk = () => close(true);
+      const onCancel = () => close(false);
+      const onOverlayClick = (e) => {
+        if (e.target === overlay) close(false);
+      };
+      const onKeydown = (e) => {
+        if (e.key === "Escape") close(false);
+      };
+
+      okBtn.addEventListener("click", onOk);
+      cancelBtn.addEventListener("click", onCancel);
+      overlay.addEventListener("click", onOverlayClick);
+      document.addEventListener("keydown", onKeydown);
+    });
+  }
+
+  async function clearSavedData() {
+    const confirmed = await showConfirmModal(
+      "Clear all saved CV data from this browser and reset the form? This action cannot be undone.",
+    );
+    if (!confirmed) return;
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (err) {
+      console.warn("Could not clear saved CV data from local storage:", err);
+    }
+    resetForm();
+  }
+
   function normalizeEntries(list) {
     if (!Array.isArray(list)) return [];
     return list.map((item) => ({
@@ -199,6 +326,7 @@
     const entry = { id: uid(), title: "", sub: "", period: "", desc: "" };
     state[type].push(entry);
     el(`${type}-list`).appendChild(createEntryCard(type, entry));
+    persist();
   }
 
   function setEntryField(type, id, field, value) {
@@ -249,6 +377,7 @@
     const lang = { id: uid(), name: "", level: "" };
     state.langs.push(lang);
     el("lang-list").appendChild(createLangCard(lang));
+    persist();
   }
 
   function setLangField(id, field, value) {
@@ -452,11 +581,11 @@
       <div class="cv-body">
         ${renderSidebar(fields)}
         ${renderMain(summary, misc)}
-      </div>
-      <div class="cv-footer">Organized learning. Clear communication. Lasting impact.</div>`;
+      </div>`;
 
     el("cv-source").innerHTML = h;
     paginate(h);
+    persist();
   }
 
   /* ── Pagination (live preview) ────────────────────────────
@@ -466,8 +595,14 @@
      always matches what gets exported: measure #cv-source (the hidden,
      continuous render) for safe break points, then rebuild #cv-pages
      as a stack of fixed-height sheets, each showing the slice of the
-     content that belongs on that page. */
+     content that belongs on that page. A footer bar (tagline + page
+     number) is rendered separately, outside the windowed content, so it
+     always sits pinned to the true bottom of every sheet instead of
+     wherever the continuous content happens to end. */
   const PAGE_H = 1122; // A4 height in px @ 96dpi, matches the PDF export's page size
+  const FOOTER_H = 34; // reserved footer-bar height at the bottom of every page
+  const CONTENT_H = PAGE_H - FOOTER_H; // usable height for CV content per page
+  const FOOTER_TAGLINE = "Organized learning. Clear communication. Lasting impact.";
   const PAGE_BREAK_AVOID = ".cv-hdr, .cv-entry, .cv-sb-section, .cv-contact-item, .cv-lang-row";
 
   function computePageBreaks(sourceEl) {
@@ -480,15 +615,25 @@
 
     const breaks = [0];
     let cursor = 0;
-    while (total - cursor > PAGE_H && breaks.length < 100) {
-      let candidate = cursor + PAGE_H;
+    while (total - cursor > CONTENT_H && breaks.length < 100) {
+      let candidate = cursor + CONTENT_H;
       const blocker = avoidRects.find((r) => candidate > r.top && candidate < r.bottom);
       if (blocker) candidate = blocker.top;
-      if (candidate <= cursor) candidate = cursor + PAGE_H; // single element taller than a page: force the cut
+      if (candidate <= cursor) candidate = cursor + CONTENT_H; // single element taller than a page: force the cut
       breaks.push(candidate);
       cursor = candidate;
     }
     breaks.push(total);
+
+    // If the final page would only hold a sliver of trailing whitespace
+    // (e.g. a container's bottom padding poking a few px past the last
+    // real element), fold it into the previous page instead of spawning
+    // an almost-empty extra sheet.
+    const SLIVER_TOLERANCE = 40;
+    while (breaks.length > 2 && total - breaks[breaks.length - 2] < SLIVER_TOLERANCE) {
+      breaks.splice(breaks.length - 2, 1);
+    }
+
     return breaks;
   }
 
@@ -503,13 +648,22 @@
       pagesHtml += `
         <div class="cv-sheet cv-page">
           <div class="cv-page-inner" style="transform: translateY(-${top}px)">${contentHtml}</div>
-          ${pageCount > 1 ? `<div class="cv-page-number">Page ${i + 1} of ${pageCount}</div>` : ""}
+          <div class="cv-page-footer">
+            <span class="cv-footer-tagline">${FOOTER_TAGLINE}</span>
+            ${pageCount > 1 ? `<span class="cv-footer-pageno">${i + 1} / ${pageCount}</span>` : ""}
+          </div>
         </div>`;
     }
     el("cv-pages").innerHTML = pagesHtml;
   }
 
   /* ── PDF Export ────────────────────────────────────────── */
+  // Bottom PDF margin reserved on every page, matching the live preview's
+  // FOOTER_H (34px of a 1122px sheet, converted to mm for an A4 page) — it
+  // keeps CV content from ever rendering under the footer bar we draw
+  // ourselves in addPageFooters() below.
+  const FOOTER_MM = 9;
+
   function exportPDF() {
     const preview = el("cv-source");
     const name = val("f-name").replace(/\s+/g, "_") || "CV";
@@ -525,7 +679,7 @@
 
     html2pdf()
       .set({
-        margin: 0,
+        margin: [0, 0, FOOTER_MM, 0],
         filename: `${name}_CV.pdf`,
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: {
@@ -561,12 +715,44 @@
       .toCanvas()
       .then(trimTrailingSliver)
       .toPdf()
+      .then(addPageFooters)
       .save()
       .then(reset)
       .catch((err) => {
         reset();
         alert(`PDF export failed: ${err.message}`);
       });
+  }
+
+  // Draws the tagline + "i / N" page number into the blank bottom margin
+  // reserved on every page (see FOOTER_MM above), since that strip is never
+  // part of the captured CV content — mirrors the live preview's per-page
+  // footer bar exactly instead of leaving it to wherever content happens
+  // to end.
+  function addPageFooters() {
+    const pdf = this.prop.pdf;
+    const pageCount = pdf.internal.getNumberOfPages();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const lineY = pageHeight - FOOTER_MM;
+    const textY = pageHeight - FOOTER_MM / 2 + 1;
+
+    for (let i = 1; i <= pageCount; i++) {
+      pdf.setPage(i);
+      pdf.setDrawColor(232, 205, 176); // --cream-dark
+      pdf.setLineWidth(0.15);
+      pdf.line(0, lineY, pageWidth, lineY);
+
+      pdf.setFont(undefined, "normal");
+      pdf.setFontSize(7);
+      pdf.setTextColor(122, 141, 153); // --ink-light
+      pdf.text(FOOTER_TAGLINE, pageWidth / 2, textY, { align: "center" });
+
+      if (pageCount > 1) {
+        pdf.setFont(undefined, "bold");
+        pdf.text(`${i} / ${pageCount}`, pageWidth - 10, textY, { align: "right" });
+      }
+    }
   }
 
   // html2pdf computes each page's pixel height from the PDF page size, and
@@ -599,6 +785,8 @@
   function bindStaticControls() {
     el("btn-import").addEventListener("click", () => el("json-input").click());
     el("json-input").addEventListener("change", handleJSONImport);
+    el("btn-export-json").addEventListener("click", handleJSONExport);
+    el("btn-clear").addEventListener("click", clearSavedData);
 
     el("btn-export").addEventListener("click", exportPDF);
 
@@ -633,7 +821,7 @@
     );
     bindEntryList("lang-list", removeLang, setLangField);
     bindSkillList();
-    render();
+    if (!loadPersisted()) render();
   }
 
   init();

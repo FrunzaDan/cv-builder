@@ -15,12 +15,20 @@
             <h1>CV Builder</h1>
             <p>Live preview updates as you type</p>
           </div>
-          <button id="btn-import" class="btn-import" type="button">
-            📂 Import
-          </button>
-          <button id="btn-export" class="btn-export" type="button">
-            ⬇ Export as PDF
-          </button>
+          <div class="form-header-actions">
+            <button id="btn-import" class="btn-import" type="button">
+              📂 Import
+            </button>
+            <button id="btn-export-json" class="btn-import" type="button">
+              💾 Save JSON
+            </button>
+            <button id="btn-export" class="btn-export" type="button">
+              ⬇ Export as PDF
+            </button>
+            <button id="btn-clear" class="btn-clear" type="button">
+              🗑 Clear Saved Data
+            </button>
+          </div>
           <input type="file" id="json-input" accept=".json" hidden />
         </div>
 
@@ -166,6 +174,21 @@
              measuring safe page-break points and for the PDF export. -->
         <div id="cv-source-wrap" aria-hidden="true">
           <div id="cv-source" class="cv-sheet"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ CONFIRM MODAL ════════ -->
+    <div id="modal-overlay" class="modal-overlay">
+      <div id="modal-box" class="modal-box" role="alertdialog" aria-modal="true" aria-describedby="modal-message">
+        <p id="modal-message" class="modal-message"></p>
+        <div class="modal-actions">
+          <button id="modal-cancel" class="modal-btn modal-btn-cancel" type="button">
+            Cancel
+          </button>
+          <button id="modal-ok" class="modal-btn modal-btn-ok" type="button">
+            OK
+          </button>
         </div>
       </div>
     </div>
