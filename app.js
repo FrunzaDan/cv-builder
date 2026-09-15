@@ -32,22 +32,22 @@
 
   const ENTRY_META = {
     exp: {
-      cardLabel: "Berufserfahrung-Eintrag",
-      titleLabel: "Berufsbezeichnung",
+      cardLabel: "Work Experience Entry",
+      titleLabel: "Job Title",
       titlePlaceholder: "Software Engineer",
-      subLabel: "Unternehmen / Organisation",
+      subLabel: "Company / Organization",
       subPlaceholder: "Acme Corp",
-      periodPlaceholder: "Jan 2021 – Heute",
-      descPlaceholder: "Wichtige Verantwortung und Erfolge…",
+      periodPlaceholder: "Jan 2021 – Present",
+      descPlaceholder: "Key responsibilities and achievements…",
     },
     edu: {
-      cardLabel: "Ausbildungseintrag",
-      titleLabel: "Abschluss / Fachbereich",
+      cardLabel: "Education Entry",
+      titleLabel: "Degree / Field of Study",
       titlePlaceholder: "BSc Computer Science",
       subLabel: "Institution",
       subPlaceholder: "MIT",
       periodPlaceholder: "2018 – 2022",
-      descPlaceholder: "Relevante Kurse, Thesis, Auszeichnungen…",
+      descPlaceholder: "Relevant coursework, thesis, honors…",
     },
   };
 
@@ -110,9 +110,9 @@
     reader.onload = (ev) => {
       try {
         loadDataFromJSON(JSON.parse(ev.target.result));
-        alert("CV-Daten erfolgreich importiert!");
+        alert("CV data imported successfully!");
       } catch (err) {
-        alert(`Fehler beim Parsen von JSON: ${err.message}`);
+        alert(`Error parsing JSON: ${err.message}`);
       }
     };
     reader.readAsText(file);
@@ -175,11 +175,11 @@
         <input type="text" data-field="sub" placeholder="${meta.subPlaceholder}">
       </div>
       <div class="form-group">
-        <label>Zeitraum</label>
+        <label>Period</label>
         <input type="text" data-field="period" placeholder="${meta.periodPlaceholder}">
       </div>
       <div class="form-group">
-        <label>Beschreibung</label>
+        <label>Description</label>
         <textarea data-field="desc" placeholder="${meta.descPlaceholder}"></textarea>
       </div>`;
     card.querySelector('[data-field="title"]').value = entry.title;
@@ -221,17 +221,17 @@
     card.dataset.id = lang.id;
     card.innerHTML = `
       <div class="entry-card-header">
-        <span class="entry-card-label">Spracheneintrag</span>
+        <span class="entry-card-label">Language Entry</span>
         <button class="btn-remove" type="button" data-action="remove">×</button>
       </div>
       <div class="row-2">
         <div class="form-group">
-          <label>Sprache</label>
-          <input type="text" data-field="name" placeholder="Englisch">
+          <label>Language</label>
+          <input type="text" data-field="name" placeholder="English">
         </div>
         <div class="form-group">
-          <label>Niveau</label>
-          <input type="text" data-field="level" placeholder="Fließend / Muttersprache">
+          <label>Proficiency</label>
+          <input type="text" data-field="level" placeholder="Fluent / Native">
         </div>
       </div>`;
     card.querySelector('[data-field="name"]').value = lang.name;
@@ -343,7 +343,7 @@
   function entryHtml(e) {
     return `<div class="cv-entry">
       <div class="cv-entry-head">
-        <div class="cv-entry-title">${esc(e.title) || '<em style="color:#ccc">Unbenannt</em>'}</div>
+        <div class="cv-entry-title">${esc(e.title) || '<em style="color:#ccc">Untitled</em>'}</div>
         ${e.period ? `<div class="cv-entry-period">${esc(e.period)}</div>` : ""}
       </div>
       ${e.sub ? `<div class="cv-entry-sub">${esc(e.sub)}</div>` : ""}
@@ -359,7 +359,7 @@
     let h = `<div class="cv-sidebar">`;
 
     if (hasContact) {
-      h += `<div class="cv-sb-section"><div class="cv-sb-title">Kontakt</div>`;
+      h += `<div class="cv-sb-section"><div class="cv-sb-title">Contact</div>`;
       if (email) h += contact("✉", esc(email));
       if (phone) h += contact("✆", esc(phone));
       if (address) h += contact("◎", esc(address));
@@ -372,7 +372,7 @@
 
     if (state.skills.length) {
       h += `<div class="cv-sb-section">
-        <div class="cv-sb-title">Fähigkeiten</div>
+        <div class="cv-sb-title">Skills</div>
         <div class="cv-sb-tags">
           ${state.skills.map((s) => `<span class="cv-sb-tag">${esc(s)}</span>`).join("")}
         </div>
@@ -380,7 +380,7 @@
     }
 
     if (langsOk.length) {
-      h += `<div class="cv-sb-section"><div class="cv-sb-title">Sprachen</div>`;
+      h += `<div class="cv-sb-section"><div class="cv-sb-title">Languages</div>`;
       langsOk.forEach((l) => {
         h += `<div class="cv-lang-row">
           <div class="cv-lang-name">${esc(l.name)}</div>
@@ -391,7 +391,7 @@
     }
 
     if (!hasContact && !state.skills.length && !langsOk.length) {
-      h += `<div class="cv-empty-hint">Kontakt, Fähigkeiten und Sprachen werden hier angezeigt.</div>`;
+      h += `<div class="cv-empty-hint">Contact, skills, and languages will appear here.</div>`;
     }
 
     h += `</div>`;
@@ -405,19 +405,19 @@
     let h = `<div class="cv-main">`;
 
     if (summary) {
-      h += mainSec("Profil", `<div class="cv-summary">${nl2br(summary)}</div>`);
+      h += mainSec("Profile", `<div class="cv-summary">${nl2br(summary)}</div>`);
     }
     if (expFilled.length) {
-      h += mainSec("Berufserfahrung", expFilled.map(entryHtml).join(""));
+      h += mainSec("Work Experience", expFilled.map(entryHtml).join(""));
     }
     if (eduFilled.length) {
-      h += mainSec("Ausbildung", eduFilled.map(entryHtml).join(""));
+      h += mainSec("Education", eduFilled.map(entryHtml).join(""));
     }
     if (misc) {
-      h += mainSec("Zusätzliche Informationen", `<div class="cv-misc">${nl2br(misc)}</div>`);
+      h += mainSec("Additional Information", `<div class="cv-misc">${nl2br(misc)}</div>`);
     }
     if (!summary && !expFilled.length && !eduFilled.length && !misc) {
-      h += `<div class="cv-empty-hint">Ihr Profil, Erfahrung und Ausbildung werden hier angezeigt.</div>`;
+      h += `<div class="cv-empty-hint">Your profile, experience, and education will appear here.</div>`;
     }
 
     h += `</div>`;
@@ -443,7 +443,7 @@
       <div class="cv-hdr">
         <div class="cv-hdr-inner">
           <div class="cv-hdr-text">
-            <div class="cv-hdr-name">${name ? esc(name) : '<span class="cv-empty-name">Ihr Name</span>'}</div>
+            <div class="cv-hdr-name">${name ? esc(name) : '<span class="cv-empty-name">Your Name</span>'}</div>
             ${role ? `<div class="cv-hdr-divider"></div><div class="cv-hdr-role">${esc(role)}</div>` : '<div class="cv-hdr-divider"></div>'}
           </div>
           ${photoData ? `<img class="cv-hdr-photo" src="${photoData}" alt="profile photo">` : ""}
@@ -453,21 +453,81 @@
         ${renderSidebar(fields)}
         ${renderMain(summary, misc)}
       </div>
-      <div class="cv-footer">Organisiertes Lernen. Klare Kommunikation. Bleibende Auswirkung.</div>`;
+      <div class="cv-footer">Organized learning. Clear communication. Lasting impact.</div>`;
 
-    el("cv-preview").innerHTML = h;
+    el("cv-source").innerHTML = h;
+    paginate(h);
+  }
+
+  /* ── Pagination (live preview) ────────────────────────────
+     The PDF export slices the CV into A4 pages, sliding page breaks up
+     to the nearest safe boundary so a break never lands mid-entry. The
+     live preview mirrors that exact logic here so what's on screen
+     always matches what gets exported: measure #cv-source (the hidden,
+     continuous render) for safe break points, then rebuild #cv-pages
+     as a stack of fixed-height sheets, each showing the slice of the
+     content that belongs on that page. */
+  const PAGE_H = 1122; // A4 height in px @ 96dpi, matches the PDF export's page size
+  const PAGE_BREAK_AVOID = ".cv-hdr, .cv-entry, .cv-sb-section, .cv-contact-item, .cv-lang-row";
+
+  function computePageBreaks(sourceEl) {
+    const total = sourceEl.scrollHeight;
+    const baseTop = sourceEl.getBoundingClientRect().top;
+    const avoidRects = Array.from(sourceEl.querySelectorAll(PAGE_BREAK_AVOID)).map((elm) => {
+      const r = elm.getBoundingClientRect();
+      return { top: r.top - baseTop, bottom: r.bottom - baseTop };
+    });
+
+    const breaks = [0];
+    let cursor = 0;
+    while (total - cursor > PAGE_H && breaks.length < 100) {
+      let candidate = cursor + PAGE_H;
+      const blocker = avoidRects.find((r) => candidate > r.top && candidate < r.bottom);
+      if (blocker) candidate = blocker.top;
+      if (candidate <= cursor) candidate = cursor + PAGE_H; // single element taller than a page: force the cut
+      breaks.push(candidate);
+      cursor = candidate;
+    }
+    breaks.push(total);
+    return breaks;
+  }
+
+  function paginate(contentHtml) {
+    const source = el("cv-source");
+    const breaks = computePageBreaks(source);
+    const pageCount = breaks.length - 1;
+
+    let pagesHtml = "";
+    for (let i = 0; i < pageCount; i++) {
+      const top = breaks[i];
+      pagesHtml += `
+        <div class="cv-sheet cv-page">
+          <div class="cv-page-inner" style="transform: translateY(-${top}px)">${contentHtml}</div>
+          ${pageCount > 1 ? `<div class="cv-page-number">Page ${i + 1} of ${pageCount}</div>` : ""}
+        </div>`;
+    }
+    el("cv-pages").innerHTML = pagesHtml;
   }
 
   /* ── PDF Export ────────────────────────────────────────── */
   function exportPDF() {
-    const preview = el("cv-preview");
+    const preview = el("cv-source");
     const name = val("f-name").replace(/\s+/g, "_") || "CV";
+    const btn = el("btn-export");
+
+    const originalBtnText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "⏳ Generating…";
+    const reset = () => {
+      btn.disabled = false;
+      btn.textContent = originalBtnText;
+    };
 
     html2pdf()
       .set({
-        margin: [0, 0, 0, 0],
+        margin: 0,
         filename: `${name}_CV.pdf`,
-        image: { type: "jpeg", quality: 0.99 },
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: {
           scale: 2,
           useCORS: true,
@@ -481,10 +541,52 @@
           orientation: "portrait",
           compress: true,
         },
-        pagebreak: { mode: ["css", "legacy"] },
+        // "css" respects the break-inside:avoid rules on .cv-hdr, .cv-entry,
+        // .cv-sb-section etc. (see styles.css) so page breaks never slice
+        // through an entry or the header; "legacy" adds sensible automatic
+        // break points for everything else so the CV can span N pages.
+        pagebreak: {
+          mode: ["css", "legacy"],
+          avoid: [
+            ".cv-hdr",
+            ".cv-entry",
+            ".cv-sb-section",
+            ".cv-contact-item",
+            ".cv-lang-row",
+          ],
+        },
       })
       .from(preview)
-      .save();
+      .toContainer()
+      .toCanvas()
+      .then(trimTrailingSliver)
+      .toPdf()
+      .save()
+      .then(reset)
+      .catch((err) => {
+        reset();
+        alert(`PDF export failed: ${err.message}`);
+      });
+  }
+
+  // html2pdf computes each page's pixel height from the PDF page size, and
+  // that conversion doesn't land on a whole number (e.g. ~1122.02px for
+  // A4 @ 96dpi) — so content that fills a page almost exactly overflows by
+  // a sub-pixel sliver and spawns an entire extra, nearly-blank page. If
+  // the overflow past the last full page is negligible, trim it away
+  // instead of letting it allocate a whole new page.
+  function trimTrailingSliver() {
+    const canvas = this.prop.canvas;
+    const pageHeightPx = (canvas.width * this.prop.pageSize.inner.height) / this.prop.pageSize.inner.width;
+    const remainder = canvas.height % pageHeightPx;
+    const TOLERANCE_PX = 20; // canvas px at export scale — a few CSS px, well under one text line
+    if (remainder > 0 && remainder < TOLERANCE_PX) {
+      const trimmed = document.createElement("canvas");
+      trimmed.width = canvas.width;
+      trimmed.height = Math.round(canvas.height - remainder);
+      trimmed.getContext("2d").drawImage(canvas, 0, 0);
+      this.prop.canvas = trimmed;
+    }
   }
 
   /* ── Wiring ────────────────────────────────────────────── */
