@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV Builder</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ════════ FORM PANEL ════════ -->
+      <div class="form-panel">
+        <div class="form-header">
+          <div class="form-header-left">
+            <h1>Lebenslauf-Builder</h1>
+            <p>Live-Vorschau wird aktualisiert, während Sie tippen</p>
+          </div>
+          <button id="btn-import" class="btn-import" type="button">
+            📂 Importieren
+          </button>
+          <button id="btn-export" class="btn-export" type="button">
+            ⬇ Als PDF exportieren
+          </button>
+          <input type="file" id="json-input" accept=".json" hidden />
+        </div>
+
+        <div class="form-body">
+          <!-- Personal Info -->
+          <div class="section-title">Persönliche Informationen</div>
+
+          <div class="photo-upload" id="photo-upload">
+            <div class="photo-thumb" id="photo-thumb">
+              <span class="photo-thumb-plus">+</span>
+            </div>
+            <div class="photo-upload-info">
+              <strong>Profilfoto</strong>
+              <span>Klicken zum Hochladen (JPG / PNG)</span>
+              <button class="photo-remove" id="photo-remove" type="button">
+                Foto entfernen
+              </button>
+            </div>
+            <input type="file" id="photo-input" accept="image/*" hidden />
+          </div>
+
+          <div class="form-group">
+            <label>Vollständiger Name</label>
+            <input type="text" id="f-name" placeholder="Jane Doe" />
+          </div>
+          <div class="form-group">
+            <label>Berufsbezeichnung / Position</label>
+            <input
+              type="text"
+              id="f-role"
+              placeholder="Senior Software Engineer"
+            />
+          </div>
+          <div class="row-2">
+            <div class="form-group">
+              <label>E-Mail</label>
+              <input
+                type="email"
+                id="f-email"
+                placeholder="jane@example.com"
+              />
+            </div>
+            <div class="form-group">
+              <label>Telefon</label>
+              <input type="text" id="f-phone" placeholder="+1 234 567 890" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Adresse / Ort</label>
+            <input type="text" id="f-address" placeholder="Berlin, Germany" />
+          </div>
+          <div class="row-2">
+            <div class="form-group">
+              <label>LinkedIn</label>
+              <input
+                type="text"
+                id="f-linkedin"
+                placeholder="linkedin.com/in/jane"
+              />
+            </div>
+            <div class="form-group">
+              <label>Website / GitHub</label>
+              <input
+                type="text"
+                id="f-website"
+                placeholder="github.com/jane"
+              />
+            </div>
+          </div>
+          <div class="row-2">
+            <div class="form-group">
+              <label>Geburtsdatum</label>
+              <input type="text" id="f-dob" placeholder="01. Jan 1990" />
+            </div>
+            <div class="form-group">
+              <label>Führerschein</label>
+              <input type="text" id="f-license" placeholder="Klasse B" />
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="section-title">Berufliche Zusammenfassung</div>
+          <div class="form-group">
+            <textarea
+              id="f-summary"
+              placeholder="Ein prägnanter Überblick über Ihren Hintergrund und Ihre Kernstärken…"
+            ></textarea>
+          </div>
+
+          <!-- Experience -->
+          <div class="section-title">Berufserfahrung</div>
+          <div id="exp-list"></div>
+          <button id="btn-add-exp" class="btn-add" type="button">
+            + Berufserfahrung hinzufügen
+          </button>
+
+          <!-- Education -->
+          <div class="section-title">Ausbildung</div>
+          <div id="edu-list"></div>
+          <button id="btn-add-edu" class="btn-add" type="button">
+            + Ausbildung hinzufügen
+          </button>
+
+          <!-- Skills -->
+          <div class="section-title">Fähigkeiten</div>
+          <div class="tag-row">
+            <input
+              type="text"
+              id="skill-input"
+              placeholder="z. B. JavaScript, Figma, Agile…"
+            />
+            <button id="btn-add-skill" class="btn-tag-add" type="button">
+              +
+            </button>
+          </div>
+          <div id="skills-list" class="tags-list"></div>
+
+          <!-- Languages -->
+          <div class="section-title">Sprachen</div>
+          <div id="lang-list"></div>
+          <button id="btn-add-lang" class="btn-add" type="button">
+            + Sprache hinzufügen
+          </button>
+
+          <!-- Miscellaneous -->
+          <div class="section-title">Sonstiges</div>
+          <div class="form-group">
+            <textarea
+              id="f-misc"
+              placeholder="Zertifizierungen, Auszeichnungen, Hobbys, Freiwilligenarbeit…"
+            ></textarea>
+          </div>
+        </div>
+        <!-- /form-body -->
+      </div>
+      <!-- /form-panel -->
+
+      <!-- ════════ PREVIEW PANEL ════════ -->
+      <div class="preview-panel">
+        <div class="preview-label">Live-Vorschau</div>
+        <div id="cv-preview"></div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

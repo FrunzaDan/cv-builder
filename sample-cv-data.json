@@ -1,0 +1,122 @@
+{
+  "name": "Dan Frunza",
+  "role": "Software Developer",
+  "email": "frunzadan96@gmail.com",
+  "phone": "0773851161",
+  "address": "Sibiu, România",
+  "linkedin": "linkedin.com/in/dan-frunza-745094116",
+  "website": "dan-frunza.web.app/",
+  "dob": "",
+  "license": "B",
+  "summary": "Passionate about the evolution of technology.",
+  "photo": null,
+  "experience": [
+    {
+      "title": "baramundi software",
+      "sub": ".NET Developer",
+      "period": "mai 2023 - Present (3 ani 5 luni)",
+      "desc": "Developing Unified Endpoint Management (UEM), Enterprise Mobility Management (EMM) and Mobile Device Management (MDM) software using the Dot Net Environment. Sibiu, Romania."
+    },
+    {
+      "title": "Alphacomm - the fraud fighting platform",
+      "sub": ".NET Developer",
+      "period": "aprilie 2022 - mai 2023 (1 an 2 luni)",
+      "desc": "Developing web applications using the .NET environment (backend) and Angular (frontend). Used stack: Dot Net Framework and Dot Net Core, also Dot Net 6 for the backend. SQL (SSMS) for the relational databases. Angular 14 for the frontend, but also Razor, both which imply HTML, CSS and JavaScript/TypeScript knowledge. Postman for API testing and Python for automating some tasks. Git/Bitbucket for version control. Sibiu, Romania."
+    },
+    {
+      "title": "Bertrandt",
+      "sub": "Software Developer",
+      "period": "august 2020 - aprilie 2022 (1 an 9 luni)",
+      "desc": "Main Project: Porsche Diagnosis (PIDT), DSA Prodis.Automation, Java, Java Swing, Vector CANoe, SAM, ODXInspector, HTML, JSON, MS Visio. Responsible for the development and testing of ECU Diagnostic Software of the Porsche AG company. The main programming language is Java, foundation for the Prodis.Automation Infrastructure for ECU algorithms. Used implementation technologies are Java, Prodis.Automation (back-end), HTML (front-end). Database: Prodis.Server DB. Testing done in Vector CANoe and PIDT. Also aided the Jenkins implementation for Test-Automation of another project. Side Projects: CFD (Computational Fluid Dynamics), Umstroemung, Durchstroemung, ANSA, Ansys, StarCCM+, Catia V5, Aerodynamics, Thermodynamics, TBS - responsible for automotive conceptual design and the aerodynamic + thermodynamic simulation of the models. Sibiu, Romania."
+    },
+    {
+      "title": "Fraunhofer IPA",
+      "sub": ".NET Developer",
+      "period": "noiembrie 2019 - februarie 2020 (4 luni)",
+      "desc": "C# .NET, Unity 3D, Blender. Responsible for the 3D simulation of the AGV behaviour through the implementation of pathfinding algorithms (Dijkstra's algorithm, A*-Star, NavMesh) in C#. Stuttgart, Germany."
+    },
+    {
+      "title": "Gühring KG",
+      "sub": ".NET Developer",
+      "period": "iulie 2019 - septembrie 2019 (3 luni)",
+      "desc": "Technical Systems Management. Visual Basic .NET Framework, Siemens NX, NX Open API. Responsible for developing a software that generates the technical drawings in the Siemens NX CAD (using .NET Framework and NX Open API). Laiz, Germany."
+    },
+    {
+      "title": "Gühring KG",
+      "sub": ".NET Developer",
+      "period": "martie 2019 - mai 2019 (3 luni)",
+      "desc": "Technical Systems Management. NXOpen, Visual Basic .NET Framework, Siemens NX, Teamcenter. Cluj-Napoca, Romania."
+    },
+    {
+      "title": "bielomatik Leuze GmbH + Co. KG",
+      "sub": "EKL Engineer (Internship)",
+      "period": "august 2018 - septembrie 2018 (2 luni)",
+      "desc": "Internship. MMS, Siemens NX. Neuffen, Baden-Württemberg, Germany."
+    },
+    {
+      "title": "Gühring KG",
+      "sub": "TSM Engineer (Internship)",
+      "period": "iulie 2018 - iulie 2018 (1 lună)",
+      "desc": "Technical System Management - Internship. Visual Basic .NET Framework. Cluj-Napoca, Romania."
+    },
+    {
+      "title": "ZIEHL-ABEGG SE",
+      "sub": "Prototyping Engineer (Internship)",
+      "period": "iulie 2017 - iulie 2017 (1 lună)",
+      "desc": "Internship - Technisches Kompetenzzentrum Vorentwicklung Elektrische Systeme. Künzelsau, Baden-Württemberg, Germany."
+    }
+  ],
+  "education": [
+    {
+      "title": "Lucian Blaga University of Sibiu",
+      "sub": "Master's degree, Computer Science",
+      "period": "octombrie 2020 - iulie 2022",
+      "desc": ""
+    },
+    {
+      "title": "Universitatea Tehnică din Cluj-Napoca",
+      "sub": "Bachelor's degree, Inginerie Industrială (germana-engleza)",
+      "period": "octombrie 2016 - iulie 2020",
+      "desc": ""
+    },
+    {
+      "title": "University of Stuttgart",
+      "sub": "D.A.A.D. (Bachelor's Degree), Maschinenwesen",
+      "period": "2019 - 2020",
+      "desc": ""
+    },
+    {
+      "title": "Colegiul National Samuel von Brukenthal Sibiu",
+      "sub": "Science",
+      "period": "2008 - 2016",
+      "desc": ""
+    }
+  ],
+  "skills": [
+    ".NET Core",
+    "SQL",
+    "XAML",
+    "C#",
+    "Angular",
+    "Java",
+    "Python",
+    "HTML/CSS/JavaScript",
+    "Git",
+    "Siemens NX"
+  ],
+  "languages": [
+    {
+      "name": "Română",
+      "level": "Native or Bilingual"
+    },
+    {
+      "name": "Germană",
+      "level": "Full Professional - Deutsches Sprachdiplom II C1"
+    },
+    {
+      "name": "Engleză",
+      "level": "Full Professional - Cambridge English Certificate (Advanced B2-C1)"
+    }
+  ],
+  "misc": "Certifications: Deutsches Sprachdiplom II C1; Cambridge English Certificate (Advanced B2-C1)."
+}
