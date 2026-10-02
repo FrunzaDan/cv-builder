@@ -1,20 +1,20 @@
 # CV Builder
 
-A static CV/resume builder: fill in a form, watch a live preview and export the result as an A4 PDF. I built it as a no-framework project with no build step and no backend, only HTML, CSS and vanilla JavaScript.
+CV Builder is a browser-based tool for writing a CV and exporting it as a PDF. You fill in a form and see a live preview of the CV, laid out as A4 pages, as you type. Work experience, education, skills and languages can have as many entries as you need, and you can add a photo. Your data auto-saves in the browser, and you can also save it to a JSON file and import it again later. It's deliberately framework-free, with no build step and no backend: only HTML, CSS and vanilla JavaScript.
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-- **Live preview:** The CV preview updates as you type, laid out as A4 pages.
-- **Repeatable sections:** Add and remove entries for work experience, education, skills (as tags) and languages, plus a photo upload.
-- **PDF export:** Exports a paginated A4 PDF through [html2pdf.js](https://github.com/eKoopmans/html2pdf.js). Page breaks are moved so an entry isn't cut in half.
-- **JSON save and import:** Download your data as a JSON file and load it back later.
-- **Auto-save:** The form is saved to `localStorage`, so a page reload doesn't lose your work. A "clear saved data" action asks for confirmation first.
+- **Live preview:** The CV preview updates as you type and is split into A4 pages exactly as the PDF will be, with a footer and page number pinned to the bottom of each sheet. What you see on screen is what gets exported.
+- **Repeatable sections:** Work experience and education entries can be added and removed freely, each with a title, subtitle, period and description. Skills are entered as tags, languages have a name and level, and you can upload a photo.
+- **PDF export:** Exports the CV as a paginated A4 PDF through [html2pdf.js](https://github.com/eKoopmans/html2pdf.js). Page breaks are moved up to the nearest safe point, so an entry is never cut in half between two pages.
+- **JSON save and import:** **Save JSON** downloads your data as a file, and **Import** loads a file back into the form. This is handy for keeping several versions of a CV or moving it to another computer.
+- **Auto-save:** The form is saved to `localStorage` as you work, so a page reload or closed tab doesn't lose anything. **Clear Saved Data** removes it after asking for confirmation.
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend:** Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **Backend:** N/A
@@ -23,7 +23,7 @@ A static CV/resume builder: fill in a form, watch a live preview and export the 
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before running this project, ensure you have the following installed:
 
@@ -32,7 +32,7 @@ Before running this project, ensure you have the following installed:
 
 ---
 
-## ⚙️ Local Setup & Running
+## Local Setup & Running
 
 ### 1. Clone the repository
 
@@ -58,7 +58,7 @@ If you prefer serving it over HTTP, any static server works, for example `python
 
 ---
 
-## 🔌 API / App Usage
+## API / App Usage
 
 Use **Save JSON** to download your current data and **Import** to load a JSON file back into the form. [`sample-cv-data.json`](sample-cv-data.json) shows the expected shape:
 
@@ -97,6 +97,6 @@ Project files:
 
 ---
 
-## 📝 License & Notes
+## License & Notes
 
 Personal project with no license file. Everything runs in the browser; your CV data never leaves your machine except through files you download yourself.
