@@ -52,7 +52,7 @@
 
           <div class="form-group">
             <label>Full Name</label>
-            <input type="text" id="f-name" placeholder="Jane Doe" />
+            <input type="text" id="f-name" placeholder="Name" />
           </div>
           <div class="form-group">
             <label>Job Title / Position</label>
@@ -65,11 +65,7 @@
           <div class="row-2">
             <div class="form-group">
               <label>Email</label>
-              <input
-                type="email"
-                id="f-email"
-                placeholder="jane@example.com"
-              />
+              <input type="email" id="f-email" placeholder="name@example.com" />
             </div>
             <div class="form-group">
               <label>Phone</label>
@@ -78,7 +74,11 @@
           </div>
           <div class="form-group">
             <label>Address / Location</label>
-            <input type="text" id="f-address" placeholder="Berlin, Germany" />
+            <input
+              type="text"
+              id="f-address"
+              placeholder="Bucharest, Romania"
+            />
           </div>
           <div class="row-2">
             <div class="form-group">
@@ -86,16 +86,12 @@
               <input
                 type="text"
                 id="f-linkedin"
-                placeholder="linkedin.com/in/jane"
+                placeholder="linkedin.com/in/name"
               />
             </div>
             <div class="form-group">
               <label>Website / GitHub</label>
-              <input
-                type="text"
-                id="f-website"
-                placeholder="github.com/jane"
-              />
+              <input type="text" id="f-website" placeholder="github.com/name" />
             </div>
           </div>
           <div class="row-2">
@@ -180,10 +176,20 @@
 
     <!-- ════════ CONFIRM MODAL ════════ -->
     <div id="modal-overlay" class="modal-overlay">
-      <div id="modal-box" class="modal-box" role="alertdialog" aria-modal="true" aria-describedby="modal-message">
+      <div
+        id="modal-box"
+        class="modal-box"
+        role="alertdialog"
+        aria-modal="true"
+        aria-describedby="modal-message"
+      >
         <p id="modal-message" class="modal-message"></p>
         <div class="modal-actions">
-          <button id="modal-cancel" class="modal-btn modal-btn-cancel" type="button">
+          <button
+            id="modal-cancel"
+            class="modal-btn modal-btn-cancel"
+            type="button"
+          >
             Cancel
           </button>
           <button id="modal-ok" class="modal-btn modal-btn-ok" type="button">
