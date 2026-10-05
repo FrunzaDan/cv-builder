@@ -6,11 +6,11 @@ CV Builder is a browser-based tool for writing a CV and exporting it as a PDF. Y
 
 ## Key Features
 
-- **Live preview:** The CV preview updates as you type and is split into A4 pages exactly as the PDF will be, with a footer and page number pinned to the bottom of each sheet. What you see on screen is what gets exported.
+- **Live preview:** The CV preview updates as you type and is split into A4 pages exactly as the PDF will be, with a footer bar pinned to the bottom of each sheet (plus page numbers once the CV runs to more than one page). What you see on screen is what gets exported.
 - **Repeatable sections:** Work experience and education entries can be added and removed freely, each with a title, subtitle, period and description. Skills are entered as tags, languages have a name and level, and you can upload a photo.
 - **PDF export:** Exports the CV as a paginated A4 PDF through [html2pdf.js](https://github.com/eKoopmans/html2pdf.js). Page breaks are moved up to the nearest safe point, so an entry is never cut in half between two pages.
 - **JSON save and import:** **Save JSON** downloads your data as a file, and **Import** loads a file back into the form. This is handy for keeping several versions of a CV or moving it to another computer.
-- **Auto-save:** The form is saved to `localStorage` as you work, so a page reload or closed tab doesn't lose anything. **Clear Saved Data** removes it after asking for confirmation.
+- **Auto-save:** The form is saved to `localStorage` as you work, so a page reload or closed tab doesn't lose anything. **Clear Saved Data** removes it after a confirmation dialog.
 
 ---
 
@@ -44,6 +44,8 @@ cd cv-builder
 ### 2. Configuration
 
 None. There are no environment variables or settings files.
+
+The footer tagline printed on every page is hardcoded as `FOOTER_TAGLINE` near the pagination code in `app.js`. Change it there if you reuse the tool for your own CV.
 
 ### 3. Installation & Run
 
