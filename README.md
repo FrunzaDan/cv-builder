@@ -19,7 +19,7 @@ CV Builder is a browser-based tool for writing a CV and exporting it as a PDF. Y
 - **Frontend:** Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **Backend:** N/A
 - **Database / Storage:** Browser `localStorage`
-- **Tooling & Other:** html2pdf.js 0.10.1, loaded from the cdnjs CDN
+- **Tooling & Other:** html2pdf.js 0.14.0, loaded from the cdnjs CDN
 
 ---
 
